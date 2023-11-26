@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    stages {
+        stage('build') {
+            steps {
+                echo 'Cloning repository from github'
+                sh 'rm -rf jenkins-maven'
+                sh 'git clone https://github.com/javaexpresschannel/jenkins-maven.git'
+                sh 'mvn clean -f jenkins-maven'
+            }
+        }
+        stage('test') {
+            steps {
+                echo 'Testing the app'
+                sh 'mvn test -f jenkins-maven'
+            }
+        }
+        stage('deploy') {
+            steps {
+                echo 'Packaging the app'
+                sh 'mvn package -f jenkins-maven'
+            }
+        }
+    }
+}
